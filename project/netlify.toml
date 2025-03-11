@@ -1,0 +1,50 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Force HTTPS and www
+[[redirects]]
+  from = "http://mktsync.com/*"
+  to = "https://www.mktsync.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://mktsync.com/*"
+  to = "https://www.mktsync.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.mktsync.com/*"
+  to = "https://www.mktsync.com/:splat"
+  status = 301
+  force = true
+
+# Custom domain configuration
+[context.production]
+  [context.production.environment]
+    VITE_SUPABASE_URL = "${VITE_SUPABASE_URL}"
+    VITE_SUPABASE_ANON_KEY = "${VITE_SUPABASE_ANON_KEY}"
+    VITE_MERCADOLIVRE_CLIENT_ID = "${VITE_MERCADOLIVRE_CLIENT_ID}"
+    VITE_MERCADOLIVRE_CLIENT_SECRET = "${VITE_MERCADOLIVRE_CLIENT_SECRET}"
+
+# Headers for security and caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self' https://qlrsiaukuhadkqsvxbmo.supabase.co; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+    Cache-Control = "public, max-age=31536000"
