@@ -1,0 +1,29 @@
+[build]
+builder = "nixpacks"
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "npm run preview"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+numReplicas = 1
+
+[deploy.envs]
+NODE_ENV = "production"
+
+[[services]]
+name = "web"
+internal_port = 4173
+protocol = "http"
+
+[[services.ports]]
+port = 80
+internal_port = 4173
+
+[[services.ports]]
+port = 443
+internal_port = 4173
+
+[[services.domains]]
+domain = "www.mktsync.com"
